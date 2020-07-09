@@ -33,7 +33,9 @@ public struct DataStructureModel {
     }
     
     init(
-        data: DataTableContent, headerTitles: [String],
+        data: DataTableContent,
+        headerTitles: [String],
+        footerTitles: [String] = [],
         shouldMakeTitlesFitInColumn: Bool = true,
         shouldDisplayFooterHeaders: Bool = true
         //sortableColumns: [Int] // This will map onto which column can be sortable
@@ -52,9 +54,8 @@ public struct DataStructureModel {
         self.shouldFitTitles = shouldMakeTitlesFitInColumn
         self.columnAverageContentLength = self.processColumnDataAverages(data: self.data)
         
-        if shouldDisplayFooterHeaders {
-            self.footerTitles = headerTitles
-        }
+        self.footerTitles = shouldDisplayFooterHeaders ? headerTitles : footerTitles
+
     }
     
     

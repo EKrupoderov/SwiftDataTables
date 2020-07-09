@@ -106,6 +106,9 @@ public protocol SwiftDataTableDataSource: class {
     
     /// The header title for the column position to be displayed
     func dataTable(_ dataTable: SwiftDataTable, headerTitleForColumnAt columnIndex: NSInteger) -> String
+    
+    /// The footer title for the column position to be displayed
+    func dataTable(_ dataTable: SwiftDataTable, footerTitleForColumnAt columnIndex: NSInteger) -> String
 }
 ```
 

@@ -221,8 +221,17 @@ public class SwiftDataTable: UIView {
         collectionView.register(DataCell.self, forCellWithReuseIdentifier: String(describing: DataCell.self))
     }
     
-    func set(data: DataTableContent, headerTitles: [String], options: DataTableConfiguration? = nil, shouldReplaceLayout: Bool = false){
-        self.dataStructure = DataStructureModel(data: data, headerTitles: headerTitles)
+    func set(data: DataTableContent,
+             headerTitles: [String],
+             footerTitles: [String] = [],
+             shouldDisplayFooterHeaders: Bool = true,
+             options: DataTableConfiguration? = nil,
+             shouldReplaceLayout: Bool = false) {
+        
+        self.dataStructure = DataStructureModel(data: data,
+                                                headerTitles: headerTitles,
+                                                footerTitles: footerTitles,
+                                                shouldDisplayFooterHeaders: shouldDisplayFooterHeaders)
         self.createDataCellViewModels(with: self.dataStructure)
         self.applyOptions(options)
         if(shouldReplaceLayout){
@@ -284,6 +293,7 @@ public class SwiftDataTable: UIView {
     public func reload(){
         var data = DataTableContent()
         var headerTitles = [String]()
+        var footerTitles = [String]()
         
         let numberOfColumns = dataSource?.numberOfColumns(in: self) ?? 0
         let numberOfRows = dataSource?.numberOfRows(in: self) ?? 0
@@ -295,6 +305,13 @@ public class SwiftDataTable: UIView {
             headerTitles.append(headerTitle)
         }
         
+        for columnIndex in 0..<numberOfColumns {
+            guard let footerTitle = dataSource?.dataTable(self, footerTitleForColumnAt: columnIndex) else {
+                return
+            }
+            footerTitles.append(footerTitle)
+        }
+        
         for index in 0..<numberOfRows {
             guard let rowData = self.dataSource?.dataTable(self, dataForRowAt: index) else {
                 return
@@ -303,7 +320,11 @@ public class SwiftDataTable: UIView {
         }
         self.layout?.clearLayoutCache()
         self.collectionView.resetScrollPositionToTop()
-        self.set(data: data, headerTitles: headerTitles, options: self.options)
+        self.set(data: data,
+                 headerTitles: headerTitles,
+                 footerTitles: footerTitles,
+                 shouldDisplayFooterHeaders: footerTitles.isEmpty,
+                 options: self.options)
         self.collectionView.reloadData()
     }
     
