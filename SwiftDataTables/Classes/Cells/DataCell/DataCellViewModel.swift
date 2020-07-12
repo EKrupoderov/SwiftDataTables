@@ -21,6 +21,10 @@ open class DataCellViewModel: VirtualPositionTrackable, CollectionViewCellRepres
     public var stringRepresentation: String {
         return self.data.stringRepresentation
     }
+    
+    public var font: UIFont = UIFont.systemFont(ofSize: 16, weight: .bold)
+    public var fontColor: UIColor = UIColor.black
+    
     //MARK: - Lifecycle
     init(data: DataTableValueType){
         self.data = data

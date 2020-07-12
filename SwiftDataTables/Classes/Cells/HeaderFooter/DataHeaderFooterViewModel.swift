@@ -17,6 +17,9 @@ public class DataHeaderFooterViewModel: DataTableSortable {
     var indexPath: IndexPath! // Questionable
     var dataTable: SwiftDataTable!
     
+    var font: UIFont = UIFont.systemFont(ofSize: 16, weight: .bold)
+    var fontColor: UIColor = UIColor.black
+    
     public var sortType: DataTableSortType
     
     var imageStringForSortingElement: String? {

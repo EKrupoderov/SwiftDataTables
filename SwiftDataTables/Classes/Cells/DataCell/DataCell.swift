@@ -43,6 +43,7 @@ class DataCell: UICollectionViewCell {
     
     func configure(_ viewModel: DataCellViewModel){
         self.dataLabel.text = viewModel.data.stringRepresentation
-//        self.contentView.backgroundColor = .white
+        self.dataLabel.font = viewModel.font
+        self.dataLabel.textColor = viewModel.fontColor
     }
 }

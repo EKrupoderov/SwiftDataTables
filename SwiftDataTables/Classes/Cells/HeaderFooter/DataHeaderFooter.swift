@@ -22,6 +22,7 @@ class DataHeaderFooter: UICollectionReusableView {
 
         
     }
+    
     let titleLabel = UILabel()
     let sortingImageView = UIImageView()
 
@@ -47,7 +48,9 @@ class DataHeaderFooter: UICollectionReusableView {
     
     func setupViews() {
         titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .heavy)
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         addSubview(titleLabel)
         addSubview(sortingImageView)
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(DataHeaderFooter.didTapView))
@@ -72,9 +75,10 @@ class DataHeaderFooter: UICollectionReusableView {
     
     func configure(viewModel: DataHeaderFooterViewModel) {
         self.titleLabel.text = viewModel.data
+        self.titleLabel.font = viewModel.font
+        self.titleLabel.textColor = viewModel.fontColor
         self.sortingImageView.image = viewModel.imageForSortingElement
         self.sortingImageView.tintColor = viewModel.tintColorForSortingElement
-        self.backgroundColor = .white
     }
     @objc func didTapView(){
         self.didTapEvent?()

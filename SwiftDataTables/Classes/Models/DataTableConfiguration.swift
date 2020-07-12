@@ -94,6 +94,16 @@ public struct DataTableConfiguration: Equatable {
         DataStyles.Colors.unhighlightedSecondColor
     ]
     
+    public var font: UIFont = UIFont.systemFont(ofSize: 17, weight: .regular)
+    public var fontColor: UIColor = .black
+    
+    public var headerColor: UIColor = .white
+    public var headerFontColor: UIColor?
+    public var headerFont: UIFont = UIFont.systemFont(ofSize: 17, weight: .bold)
+    public var footerColor: UIColor = .white
+    public var footerFontColor: UIColor?
+    public var footerFont: UIFont = UIFont.systemFont(ofSize: 17, weight: .bold)
+
     public var fixedColumns: DataTableFixedColumnType? = nil
     
     public init(){

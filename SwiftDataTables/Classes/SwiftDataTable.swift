@@ -407,6 +407,8 @@ extension SwiftDataTable: UICollectionViewDataSource, UICollectionViewDelegate {
         //}
         //else {
         cellViewModel = self.rowModel(at: indexPath)
+        cellViewModel.font = options.font
+        cellViewModel.fontColor = options.fontColor
         //}
         let cell = cellViewModel.dequeueCell(collectionView: collectionView, indexPath: indexPath)
         return cell
@@ -430,6 +432,10 @@ extension SwiftDataTable: UICollectionViewDataSource, UICollectionViewDelegate {
         switch kind {
         case .paginationHeader:
             view.backgroundColor = UIColor.darkGray
+        case .columnHeader:
+            view.backgroundColor = options.headerColor
+        case .footerHeader:
+            view.backgroundColor = options.footerColor
         default:
             if #available(iOS 13.0, *) {
                 view.backgroundColor = .systemBackground
@@ -454,8 +460,16 @@ extension SwiftDataTable: UICollectionViewDataSource, UICollectionViewDelegate {
         let viewModel: CollectionViewSupplementaryElementRepresentable
         switch elementKind {
         case .searchHeader: viewModel = self.menuLengthViewModel
-        case .columnHeader: viewModel = self.headerViewModels[indexPath.index]
-        case .footerHeader: viewModel = self.footerViewModels[indexPath.index]
+        case .columnHeader:
+            let headerModel = self.headerViewModels[indexPath.index]
+            headerModel.font = options.headerFont
+            headerModel.fontColor = options.headerFontColor ?? options.fontColor
+            viewModel = headerModel
+        case .footerHeader:
+            let footerModel = self.footerViewModels[indexPath.index]
+            footerModel.font = options.footerFont
+            footerModel.fontColor = options.footerFontColor ?? options.fontColor
+            viewModel = footerModel
         case .paginationHeader: viewModel = self.paginationViewModel
         }
         return viewModel.dequeueView(collectionView: collectionView, viewForSupplementaryElementOfKind: kind, for: indexPath)
@@ -709,7 +723,7 @@ extension SwiftDataTable {
         let columnAverage: CGFloat = CGFloat(dataStructure.averageDataLengthForColumn(index: index))
         let sortingArrowVisualElementWidth: CGFloat = 20 // This is ugly
         let averageDataColumnWidth: CGFloat = columnAverage * self.pixelsPerCharacter() + sortingArrowVisualElementWidth
-        return max(averageDataColumnWidth, max(self.minimumColumnWidth(), self.minimumHeaderColumnWidth(index: index)))
+        return max(averageDataColumnWidth, self.minimumColumnWidth())//max(self.minimumColumnWidth(), self.minimumHeaderColumnWidth(index: index)))
     }
     
     func calculateContentWidth() -> CGFloat {
@@ -727,7 +741,7 @@ extension SwiftDataTable {
     
     //There should be an automated way to retrieve the font size of the cell
     func pixelsPerCharacter() -> CGFloat {
-        return 14
+        return 12 //14
     }
     
     func heightForPaginationView() -> CGFloat {
