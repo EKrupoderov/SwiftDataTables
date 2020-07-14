@@ -9,19 +9,6 @@
 import UIKit
 
 class DataHeaderFooter: UICollectionReusableView {
-
-    //MARK: - Properties
-    private enum Properties {
-        static let labelHorizontalMargin: CGFloat = 15
-        static let labelVerticalMargin: CGFloat = 5
-        static let separator: CGFloat = 5
-        static let imageViewHorizontalMargin: CGFloat = 5
-        static let labelWidthConstant: CGFloat = 20
-        static let imageViewWidthConstant: CGFloat = 20
-        static let imageViewAspectRatio: CGFloat = 0.75
-
-        
-    }
     
     let titleLabel = UILabel()
     let sortingImageView = UIImageView()
@@ -50,6 +37,7 @@ class DataHeaderFooter: UICollectionReusableView {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.clipsToBounds = false
         titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         addSubview(titleLabel)
         addSubview(sortingImageView)
@@ -61,15 +49,14 @@ class DataHeaderFooter: UICollectionReusableView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         sortingImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: Properties.labelWidthConstant),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: Properties.labelVerticalMargin),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Properties.labelHorizontalMargin),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Properties.labelVerticalMargin),
-            sortingImageView.widthAnchor.constraint(equalToConstant: Properties.imageViewWidthConstant),
-            sortingImageView.widthAnchor.constraint(equalTo: sortingImageView.heightAnchor, multiplier: Properties.imageViewAspectRatio),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: DataHeaderFooterViewModel.Properties.labelVerticalMargin),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: DataHeaderFooterViewModel.Properties.labelHorizontalMargin),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DataHeaderFooterViewModel.Properties.labelVerticalMargin),
+            sortingImageView.widthAnchor.constraint(equalToConstant: DataHeaderFooterViewModel.Properties.imageViewWidthConstant),
+            sortingImageView.widthAnchor.constraint(equalTo: sortingImageView.heightAnchor, multiplier: DataHeaderFooterViewModel.Properties.imageViewAspectRatio),
             sortingImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            sortingImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Properties.imageViewHorizontalMargin),
-            sortingImageView.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: Properties.separator),
+            sortingImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -DataHeaderFooterViewModel.Properties.imageViewHorizontalMargin),
+            sortingImageView.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: DataHeaderFooterViewModel.Properties.separator),
         ])
     }
     

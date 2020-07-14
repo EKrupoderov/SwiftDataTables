@@ -231,8 +231,8 @@ public class SwiftDataTable: UIView {
         self.dataStructure = DataStructureModel(data: data,
                                                 headerTitles: headerTitles,
                                                 footerTitles: footerTitles,
+                                                shouldMakeTitlesFitInColumn: false,
                                                 shouldDisplayFooterHeaders: shouldDisplayFooterHeaders)
-        self.createDataCellViewModels(with: self.dataStructure)
         self.applyOptions(options)
         if(shouldReplaceLayout){
             self.layout = SwiftDataTableLayout(dataTable: self)
@@ -720,10 +720,11 @@ extension SwiftDataTable {
     /// - Parameter index: The column index
     /// - Returns: The automatic width of the column irrespective of the Data Grid frame width
     func automaticWidthForColumn(index: Int) -> CGFloat {
-        let columnAverage: CGFloat = CGFloat(dataStructure.averageDataLengthForColumn(index: index))
-        let sortingArrowVisualElementWidth: CGFloat = 20 // This is ugly
-        let averageDataColumnWidth: CGFloat = columnAverage * self.pixelsPerCharacter() + sortingArrowVisualElementWidth
-        return max(averageDataColumnWidth, self.minimumColumnWidth())//max(self.minimumColumnWidth(), self.minimumHeaderColumnWidth(index: index)))
+        let maxOfCellsWidth = rowViewModels.compactMap({ $0[index].widthForModel() }).max() ?? 0.0
+        let headerWidth = headerViewModels[index].widthForModel(cellsWidth: maxOfCellsWidth)
+        let footerWidth = footerViewModels[index].widthForModel(cellsWidth: maxOfCellsWidth)
+        let columnMaxWidth = max(maxOfCellsWidth, headerWidth, footerWidth, minimumColumnWidth())
+        return columnMaxWidth
     }
     
     func calculateContentWidth() -> CGFloat {

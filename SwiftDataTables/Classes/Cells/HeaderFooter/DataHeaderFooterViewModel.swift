@@ -13,11 +13,21 @@ import UIKit
 public class DataHeaderFooterViewModel: DataTableSortable {
 
     //MARK: - Properties
+    enum Properties {
+        static let labelHorizontalMargin: CGFloat = 15
+        static let labelVerticalMargin: CGFloat = 5
+        static let separator: CGFloat = 5
+        static let imageViewHorizontalMargin: CGFloat = 5
+        static let labelWidthConstant: CGFloat = 40
+        static let imageViewWidthConstant: CGFloat = 20
+        static let imageViewAspectRatio: CGFloat = 0.75
+    }
+    
     let data: String
     var indexPath: IndexPath! // Questionable
     var dataTable: SwiftDataTable!
     
-    var font: UIFont = UIFont.systemFont(ofSize: 16, weight: .bold)
+    var font: UIFont = UIFont.systemFont(ofSize: 17, weight: .bold)
     var fontColor: UIColor = UIColor.black
     
     public var sortType: DataTableSortType
@@ -101,4 +111,40 @@ extension DataHeaderFooterViewModel: CollectionViewSupplementaryElementRepresent
     func headerViewDidTap(){
         self.dataTable.didTapColumn(index: self.indexPath)
     }
+}
+
+extension DataHeaderFooterViewModel {
+    
+    public func widthForModel(cellsWidth: CGFloat) -> CGFloat {
+
+        var finalWidth: CGFloat = 40.0
+        let words =  data.split { !$0.isLetter }
+        if words.count < 2 {
+            finalWidth = max(finalWidth, stringBoundingRect(data).width)
+        } else if words.count > 1, let maxWord = words.max(by: { $1.count > $0.count }) {
+            let wmw = stringBoundingRect(String(maxWord)).width
+            var other = words
+            other.removeAll(where: { $0 == maxWord })
+            let wwd = stringBoundingRect(other.joined(separator: " "), width: cellsWidth).width
+            finalWidth = max(wmw, wwd)
+        } else {
+            finalWidth = stringBoundingRect(data).width
+        }
+        return finalWidth
+            + Properties.labelHorizontalMargin
+            + Properties.imageViewHorizontalMargin
+            + Properties.imageViewWidthConstant
+            + Properties.separator
+    }
+    
+    func stringBoundingRect(_ str: String, width: CGFloat = .greatestFiniteMagnitude) -> CGRect {
+        let attributes = [NSAttributedString.Key.font: font]
+        let height = sortType != .hidden ? dataTable.heightForSectionHeader() : 0.0
+        let size = CGSize(width: width, height: height)
+        return (str as NSString).boundingRect(with: size,
+                                              options: .usesLineFragmentOrigin,
+                                              attributes: attributes,
+                                              context: nil)
+    }
+    
 }

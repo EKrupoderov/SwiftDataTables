@@ -9,20 +9,13 @@
 import UIKit
 
 class DataCell: UICollectionViewCell {
-
-    //MARK: - Properties
-    private enum Properties {
-        static let verticalMargin: CGFloat = 5
-        static let horizontalMargin: CGFloat = 15
-        static let widthConstant: CGFloat = 20
-    }
     
     let dataLabel = UILabel()
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        //setup()
     }
     
     required init?(coder: NSCoder) {
@@ -33,17 +26,19 @@ class DataCell: UICollectionViewCell {
         dataLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(dataLabel)
         NSLayoutConstraint.activate([
-            dataLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: Properties.widthConstant),
-            dataLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Properties.verticalMargin),
-            dataLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Properties.verticalMargin),
-            dataLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Properties.horizontalMargin),
-            dataLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Properties.horizontalMargin),
+            //dataLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: DataCellViewModel.Properties.widthConstant),
+            dataLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DataCellViewModel.Properties.verticalMargin),
+            dataLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DataCellViewModel.Properties.verticalMargin),
+            dataLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DataCellViewModel.Properties.horizontalMargin),
+            dataLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DataCellViewModel.Properties.horizontalMargin),
         ])
     }
     
     func configure(_ viewModel: DataCellViewModel){
-        self.dataLabel.text = viewModel.data.stringRepresentation
-        self.dataLabel.font = viewModel.font
-        self.dataLabel.textColor = viewModel.fontColor
+        setup()
+        dataLabel.clipsToBounds = false
+        dataLabel.text = viewModel.data.stringRepresentation
+        dataLabel.font = viewModel.font
+        dataLabel.textColor = viewModel.fontColor
     }
 }

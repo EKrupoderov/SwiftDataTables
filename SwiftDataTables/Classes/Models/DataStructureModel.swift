@@ -26,6 +26,7 @@ public struct DataStructureModel {
     var shouldFootersShowSortingElement: Bool = false
     
     private var columnAverageContentLength = [Float]()
+    private var columnMaxContentWidth = [CGFloat]()
     
     //MARK: - Lifecycle
     init() {
@@ -53,6 +54,7 @@ public struct DataStructureModel {
         self.data = sanitisedData//sanitisedData
         self.shouldFitTitles = shouldMakeTitlesFitInColumn
         self.columnAverageContentLength = self.processColumnDataAverages(data: self.data)
+        self.columnMaxContentWidth = self.processColumnDataMaxWidth(data: self.data)
         
         self.footerTitles = shouldDisplayFooterHeaders ? headerTitles : footerTitles
 
@@ -70,6 +72,11 @@ public struct DataStructureModel {
         }
         return self.columnAverageContentLength[index]
     }
+    
+    public func maxDataWidthForColumn(
+        index: Int) -> CGFloat {
+        return self.columnMaxContentWidth[index]
+    }
 
     //extension DataStructureModel {
     //Finds the average content length in each column
@@ -83,6 +90,33 @@ public struct DataStructureModel {
             columnContentAverages.append((data.count == 0) ? 1 : Float(averageForCurrentColumn) / Float(data.count))
         }
         return columnContentAverages
+    }
+    
+    private func processColumnDataMaxWidth(data: DataTableContent) -> [CGFloat] {
+        var columnContentMaxWidth = [CGFloat]()
+        for column in Array(0..<self.headerTitles.count) {
+            var maxWidthForCurrentColumn: CGFloat = 0.0
+            for row in Array(0..<data.count) {
+                let rowData = data[row][column].stringRepresentation as NSString
+                let headerData = headerTitles[column]
+                let constraintRect = CGSize(width: .max, height: 50)
+                let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold)]
+                
+                let rowDataRect = rowData.boundingRect(with: constraintRect,
+                                                       options: .usesLineFragmentOrigin,
+                                                       attributes: attributes,
+                                                       context: nil)
+                
+                let headerDataRect = headerData.boundingRect(with: constraintRect,
+                                                             options: .usesLineFragmentOrigin,
+                                                             attributes: attributes,
+                                                             context: nil)
+                
+                maxWidthForCurrentColumn = max(rowDataRect.width, headerDataRect.width + 20.0 )
+            }
+            columnContentMaxWidth.append((data.count == 0) ? 50 : maxWidthForCurrentColumn)
+        }
+        return columnContentMaxWidth
     }
     
     

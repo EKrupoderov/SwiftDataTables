@@ -11,6 +11,13 @@ import UIKit
 
 open class DataCellViewModel: VirtualPositionTrackable, CollectionViewCellRepresentable {
     
+    //MARK: - Properties
+    enum Properties {
+        static let verticalMargin: CGFloat = 5
+        static let horizontalMargin: CGFloat = 15
+        static let widthConstant: CGFloat = 20
+    }
+    
     //MARK: - Public Properties
     var xPositionRunningTotal: CGFloat?  = nil
     var yPositionRunningTotal: CGFloat?  = nil
@@ -22,7 +29,7 @@ open class DataCellViewModel: VirtualPositionTrackable, CollectionViewCellRepres
         return self.data.stringRepresentation
     }
     
-    public var font: UIFont = UIFont.systemFont(ofSize: 16, weight: .bold)
+    public var font: UIFont = UIFont.systemFont(ofSize: 17, weight: .bold)
     public var fontColor: UIColor = UIColor.black
     
     //MARK: - Lifecycle
@@ -46,6 +53,7 @@ open class DataCellViewModel: VirtualPositionTrackable, CollectionViewCellRepres
         return cell
     }
 }
+
 extension DataCellViewModel: Equatable {
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -59,5 +67,21 @@ extension DataCellViewModel: Equatable {
         return lhs.data == rhs.data
         && lhs.highlighted == rhs.highlighted
     }
+}
 
+// MARK: - layout
+
+extension DataCellViewModel {
+    
+    public func widthForModel() -> CGFloat {
+        let strData = stringRepresentation as NSString
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: virtualHeight)
+        let attributes = [NSAttributedString.Key.font: font]
+        let rowDataRect = strData.boundingRect(with: constraintRect,
+                                               options: .usesLineFragmentOrigin,
+                                               attributes: attributes,
+                                               context: nil)
+        return rowDataRect.width + 2*Properties.horizontalMargin
+    }
+    
 }
