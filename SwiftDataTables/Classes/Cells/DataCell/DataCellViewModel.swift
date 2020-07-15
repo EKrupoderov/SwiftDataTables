@@ -29,7 +29,7 @@ open class DataCellViewModel: VirtualPositionTrackable, CollectionViewCellRepres
         return self.data.stringRepresentation
     }
     
-    public var font: UIFont = UIFont.systemFont(ofSize: 17, weight: .bold)
+    public var font: UIFont = UIFont.systemFont(ofSize: 17, weight: .regular)
     public var fontColor: UIColor = UIColor.black
     
     //MARK: - Lifecycle

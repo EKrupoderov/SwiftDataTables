@@ -120,7 +120,7 @@ extension DataHeaderFooterViewModel {
         var finalWidth: CGFloat = 40.0
         let words =  data.split { !$0.isLetter }
         if words.count < 2 {
-            finalWidth = max(finalWidth, stringBoundingRect(data).width)
+            finalWidth = max(finalWidth, stringBoundingRect(data).width + 1.0) 
         } else if words.count > 1, let maxWord = words.max(by: { $1.count > $0.count }) {
             let wmw = stringBoundingRect(String(maxWord)).width
             var other = words
